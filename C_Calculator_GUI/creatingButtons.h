@@ -2,6 +2,6 @@
 #define FUNCTIONS_H_INCLUDED
 
 // Function prototypes
-int createButtons(HWND hwnd);
+void createButtons(HWND hwnd);
 
 #endif
