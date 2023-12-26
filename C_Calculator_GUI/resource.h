@@ -5,7 +5,22 @@
 #define IDD_TOOLBAR 401
 #define IDC_PRESS 1000
 #define IDC_OTHER 1001
-
+#define BTN_ID_7 2000
+#define BTN_ID_8 2001
+#define BTN_ID_9 2002
+#define BTN_ID_P 2003
+#define BTN_ID_4 2004
+#define BTN_ID_5 2005
+#define BTN_ID_6 2006
+#define BTN_ID_M 2007
+#define BTN_ID_1 2008
+#define BTN_ID_2 2009
+#define BTN_ID_3 2010
+#define BTN_ID_x 2011
+#define BTN_ID_C 2012
+#define BTN_ID_0 2013
+#define BTN_ID_E 2014
+#define BTN_ID_D 2015
 #define ID_FILE_EXIT 9001
 #define ID_STUFF_GO 9002
 #define ID_HELP_ABOUT 9003
