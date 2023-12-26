@@ -180,13 +180,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         g_szClassName, //what kind of window to create
         L"The title of my window", //window name (Read more about it)
         WS_OVERLAPPEDWINDOW, // the Window Style parameter
-        CW_USEDEFAULT, CW_USEDEFAULT, 360, 160, //x,y,width,height (in pixels)
+        CW_USEDEFAULT, CW_USEDEFAULT, 200, 280, //x,y,width,height (in pixels)
         NULL, NULL, hInstance, NULL); //the Parent Window handle, the menu handle, the application instance handle, and a pointer to window creation data.
    
     HWND hwndEdit = CreateWindowEx( // Text
         WS_EX_CLIENTEDGE, TEXT("Edit"), TEXT("test"),
         WS_CHILD | WS_VISIBLE, 
-        100, 20, 140, 20, 
+        20, 20, 140, 20, 
         hwnd, NULL, NULL, NULL);
     
     createButtons(hwnd);
