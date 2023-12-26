@@ -18,7 +18,7 @@
     <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="creatingButtons.c">
+    <ClCompile Include="tinyexpr.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,7 +26,7 @@
     <ClInclude Include="resource.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="creatingButtons.h">
+    <ClInclude Include="tinyexpr.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
   </ItemGroup>
