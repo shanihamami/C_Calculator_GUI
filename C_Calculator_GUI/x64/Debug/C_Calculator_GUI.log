@@ -1,13 +1,2 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (winAPI Tutorial.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  main.c
-D:\Visual Studio Projects\C_Calculator_GUI\C_Calculator_GUI\main.c(62,1): warning C4312: 'type cast': conversion from 'int' to 'HMENU' of greater size
-D:\Visual Studio Projects\C_Calculator_GUI\C_Calculator_GUI\main.c(126,16): warning C4133: 'function': incompatible types - from 'BOOL (__cdecl *)(HWND,UINT,WPARAM,LPARAM)' to 'DLGPROC'
-D:\Visual Studio Projects\C_Calculator_GUI\C_Calculator_GUI\main.c(151,28): warning C4133: 'function': incompatible types - from 'char [1]' to 'LPCWSTR'
-D:\Visual Studio Projects\C_Calculator_GUI\C_Calculator_GUI\main.c(175,14): warning C4133: 'function': incompatible types - from 'BOOL (__cdecl *)(HWND,UINT,WPARAM,LPARAM)' to 'DLGPROC'
-D:\Visual Studio Projects\C_Calculator_GUI\C_Calculator_GUI\main.c(200,32): warning C4133: 'function': incompatible types - from 'char [260]' to 'LPWSTR'
-D:\Visual Studio Projects\C_Calculator_GUI\C_Calculator_GUI\main.c(201,20): warning C4133: 'function': incompatible types - from 'char [260]' to 'LPCWSTR'
-D:\Visual Studio Projects\C_Calculator_GUI\C_Calculator_GUI\main.c(175,14): warning C4244: 'initializing': conversion from 'INT_PTR' to 'int', possible loss of data
-D:\Visual Studio Projects\C_Calculator_GUI\C_Calculator_GUI\main.c(248,19): warning C4133: '=': incompatible types - from 'const char *' to 'LPCWSTR'
-D:\Visual Studio Projects\C_Calculator_GUI\C_Calculator_GUI\main.c(264,3): warning C4133: 'function': incompatible types - from 'const char [14]' to 'LPCWSTR'
-D:\Visual Studio Projects\C_Calculator_GUI\C_Calculator_GUI\main.c(299,12): warning C4244: 'return': conversion from 'WPARAM' to 'int', possible loss of data
   C_Calculator_GUI.vcxproj -> D:\Visual Studio Projects\C_Calculator_GUI\x64\Debug\C_Calculator_GUI.exe

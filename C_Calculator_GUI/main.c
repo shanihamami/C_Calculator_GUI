@@ -7,10 +7,10 @@
 #include "tinyexpr.h"
 #include "resource.h"
 
-int ROW_Y = 10;
-int ROW_X = 10;
+int ROW_Y = 50;
+int ROW_X = 20;
 
-wchar_t result[sizeof(int)];
+wchar_t result[64];
 
 HWND hwndEdit; // Global variable for text
 
@@ -18,6 +18,18 @@ HWND buttons[16];
 
 wchar_t* expr;
 char* nexpr;
+
+void CenterWindow(HWND hwnd) {
+	RECT rcClient, rcWindow;
+
+	GetClientRect(GetDesktopWindow(), &rcClient);
+	GetWindowRect(hwnd, &rcWindow);
+
+	int xPos = (rcClient.right - (rcWindow.right - rcWindow.left)) / 2;
+	int yPos = (rcClient.bottom - (rcWindow.bottom - rcWindow.top)) / 2;
+
+	SetWindowPos(hwnd, NULL, xPos, yPos, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+}
 
 void AppendTextToEdit(HWND hwndEdit, const wchar_t* newText) {
 	// Get the current length of text in the edit control
@@ -46,20 +58,24 @@ void createButtons(HWND hwnd) {
 	wchar_t buttonText[2]; // Wide character array to store a single character and null terminator
 	int indent;
 
-	for (int i = 0; i < 16; i++) { // TODO: Change from 16 to the string's length
+	for (int i = 0; i < 16; i++) {
 
 		buttonText[0] = labels[i]; // Copy the character
 		buttonText[1] = '\0'; // Null-terminate the string
 
 		indent = i % 4;
-		if (!indent) ROW_Y = ROW_Y + 40;
+		if (!indent) ROW_Y = ROW_Y + 75;
 
 		buttons[i] = CreateWindow( // Button
 			L"Button", // Predefined class; Unicode assumed
 			buttonText, // Button text
-			WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles 
-			ROW_X + indent * 40, ROW_Y, 30, 30, //x, y, width, height
+			WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_ICON,  // Styles 
+			ROW_X + indent * 75, ROW_Y, 60, 60, //x, y, width, height
 			hwnd, (HMENU)(BTN_ID_7 + i), (HINSTANCE)GetWindowLongPtr(hwnd, GWLP_HINSTANCE), NULL); // Parent, menu, application instance, pointer
+
+		HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_7ICON+i));
+		SendMessage(buttons[i], BM_SETIMAGE, IMAGE_ICON, (LPARAM)hIcon);
+
 	}
 
 }
@@ -67,7 +83,6 @@ void createButtons(HWND hwnd) {
 const char g_szClassName[] = "myWindowClass"; // step 1.1 Registering the Window Class - the name of our window class
 HWND g_hToolbar = NULL;
 
-// Adding a dialog box with DialogBox()
 BOOL CALLBACK AboutDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
 	switch (Message)
@@ -92,49 +107,12 @@ BOOL CALLBACK AboutDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
 	return TRUE;
 }
 
-// Adding a dialog box with CreateDialog()
-BOOL CALLBACK ToolDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
-{
-	switch (Message)
-	{
-	case WM_COMMAND:
-		switch (LOWORD(wParam))
-		{
-		case IDC_PRESS:
-			MessageBox(hwnd, L"Hi!", L"This is a message",
-				MB_OK | MB_ICONEXCLAMATION);
-			//EndDialog(hwnd, IDC_PRESS);
-			break;
-		case IDC_OTHER:
-			MessageBox(hwnd, L"Bye!", L"This is also a message",
-				MB_OK | MB_ICONEXCLAMATION);
-			//EndDialog(hwnd, IDC_OTHER);
-			break;
-		}
-		break;
-	default:
-		return FALSE;
-	}
-	return TRUE;
-}
-
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	static HBRUSH hbrBackground = NULL;
 	switch (msg)
 	{
-	case WM_CREATE:
-		g_hToolbar = CreateDialog(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_TOOLBAR),
-			hwnd, ToolDlgProc);
-		if (g_hToolbar != NULL)
-		{
-			ShowWindow(g_hToolbar, SW_SHOW);
-		}
-		else
-		{
-			MessageBox(hwnd, L"CreateDialog returned NULL", L"Warning!",
-				MB_OK | MB_ICONINFORMATION);
-		}
-		break;
+
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
@@ -144,21 +122,78 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		case BTN_ID_8:
 			AppendTextToEdit(hwndEdit, L"8");
 			break;
+		case BTN_ID_9:
+			AppendTextToEdit(hwndEdit, L"9");
+			break;
 		case BTN_ID_P:
 			AppendTextToEdit(hwndEdit, L"+");
 			break;
+		case BTN_ID_4:
+			AppendTextToEdit(hwndEdit, L"4");
+			break;
+		case BTN_ID_5:
+			AppendTextToEdit(hwndEdit, L"5");
+			break;
+		case BTN_ID_6:
+			AppendTextToEdit(hwndEdit, L"6");
+			break;
+		case BTN_ID_M:
+			AppendTextToEdit(hwndEdit, L"-");
+			break;
+		case BTN_ID_1:
+			AppendTextToEdit(hwndEdit, L"1");
+			break;
+		case BTN_ID_2:
+			AppendTextToEdit(hwndEdit, L"2");
+			break;
+		case BTN_ID_3:
+			AppendTextToEdit(hwndEdit, L"3");
+			break;
+		case BTN_ID_x:
+			AppendTextToEdit(hwndEdit, L"*");
+			break;
 		case BTN_ID_C:
 			SetWindowText(hwndEdit, "");
+			break;
+		case BTN_ID_0:
+			AppendTextToEdit(hwndEdit, L"0");
 			break;
 		case BTN_ID_E:
 			expr = (wchar_t*)malloc((GetWindowTextLength(hwndEdit) + 1) * sizeof(wchar_t));
 			GetWindowText(hwndEdit, expr, GetWindowTextLength(hwndEdit) + 1);
 			nexpr = (char*)malloc((wcstombs(NULL, expr, 0) + 1) * sizeof(char));
 			wcstombs(nexpr, expr, (wcstombs(NULL, expr, 0) + 1));
-			swprintf(result, sizeof(int), L"%d", (int)te_interp(nexpr, 0));
+
+			// Evaluate the expression and get the result
+			double evalResult = te_interp(nexpr, 0);
+
+			if (evalResult == (int)evalResult) {
+				// Format the result with to int
+				swprintf(result, sizeof(result) / sizeof(wchar_t), L"%d", (int)evalResult);
+			}
+			else {
+				// Format the result with exactly 10 digits after the decimal point
+				swprintf(result, sizeof(result) / sizeof(wchar_t), L"%.10f", evalResult);
+				// Remove trailing zeros
+				int len = wcslen(result);
+				while (len > 0 && (result[len - 1] == L'0' || result[len - 1] == L'.')) {
+					if (result[len - 1] == L'.') {
+						result[len - 1] = L'\0'; // Remove the decimal point and stop
+						break;
+					}
+					result[--len] = L'\0'; // Remove trailing zero
+				}	
+			}
+
+			// Set the formatted result in the edit control
 			SetWindowText(hwndEdit, result);
+
+			// Free allocated memory
 			free(expr);
 			free(nexpr);
+			break;
+		case BTN_ID_D:
+			AppendTextToEdit(hwndEdit, L"/");
 			break;
 		case ID_FILE_EXIT:
 			PostMessage(hwnd, WM_CLOSE, 0, 0);
@@ -174,41 +209,36 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			int ret = DialogBox(GetModuleHandle(NULL),
 				MAKEINTRESOURCE(IDD_ABOUT), hwnd, AboutDlgProc);
-			if (ret == IDOK) {
-				MessageBox(hwnd, L"Dialog exited with IDOK.", L"Notice",
-					MB_OK | MB_ICONINFORMATION);
-			}
-			else if (ret == IDCANCEL) {
-				MessageBox(hwnd, L"Dialog exited with IDCANCEL.", L"Notice",
-					MB_OK | MB_ICONINFORMATION);
-			}
-			else if (ret == -1) {
+			if (ret == -1) {
 				MessageBox(hwnd, L"Dialog failed!", L"Error",
 					MB_OK | MB_ICONINFORMATION);
 			}
 		}
 		break;
-		// Other menu commands...
 		}
 		break;
 
-	case WM_LBUTTONDOWN:
-	{
-		char szFileName[MAX_PATH];
-		HINSTANCE hInstance = GetModuleHandle(NULL);
-
-		GetModuleFileName(hInstance, szFileName, MAX_PATH);
-		MessageBox(hwnd, szFileName, L"This program is:", MB_OK | MB_ICONINFORMATION);
-	}
-	break;
-	case WM_RBUTTONDOWN:
-		MessageBox(hwnd, L"Right Mouse Clicked", L"Message", MB_OK | MB_ICONINFORMATION);
+	case WM_CREATE:
+		CenterWindow(hwnd);
+		hbrBackground = CreateSolidBrush(RGB(44, 44, 44));
 		break;
+
+	case WM_ERASEBKGND:
+	{
+		HDC hdc = (HDC)wParam;
+		RECT rect;
+		GetClientRect(hwnd, &rect);
+		FillRect(hdc, &rect, hbrBackground);
+		return 1; // Indicate that background is erased
+	}
 
 	case WM_CLOSE: // WM_CLOSE is sent when the user presses the Close Button
 		DestroyWindow(hwnd); // the system sends the WM_DESTROY message to the window getting destroyed
 		break;
 	case WM_DESTROY: // destroys any remaining child windows before finally removing our window from the system
+		if (hbrBackground) {
+			DeleteObject(hbrBackground); // Clean up the brush
+		}
 		PostQuitMessage(0);
 		break;
 	default:
@@ -262,16 +292,22 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	hwnd = CreateWindowEx(
 		WS_EX_CLIENTEDGE, //the extended windows style, later try 0
 		g_szClassName, //what kind of window to create
-		L"The title of my window", //window name (Read more about it)
+		L"Calculator", //window name (Read more about it)
 		WS_OVERLAPPEDWINDOW, // the Window Style parameter
-		CW_USEDEFAULT, CW_USEDEFAULT, 200, 280, //x,y,width,height (in pixels)
+		CW_USEDEFAULT, CW_USEDEFAULT, 350, 1.618*320, //x,y,width,height (in pixels)
 		NULL, NULL, hInstance, NULL); //the Parent Window handle, the menu handle, the application instance handle, and a pointer to window creation data.
-
+	
 	hwndEdit = CreateWindowEx( // Text
-		WS_EX_CLIENTEDGE, TEXT("Edit"), TEXT("test"),
-		WS_CHILD | WS_VISIBLE,
-		20, 20, 140, 20,
+		WS_EX_CLIENTEDGE, TEXT("Edit"), TEXT(""),
+		WS_CHILD | WS_VISIBLE | ES_MULTILINE | ES_AUTOVSCROLL, // Add ES_BOTTOM style for bottom alignment
+		25, 20, 280, 50,
 		hwnd, NULL, NULL, NULL);
+
+	// Set a new font for the edit control
+	HFONT hFont = CreateFont(40, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+		OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Calibri");
+
+	SendMessage(hwndEdit, WM_SETFONT, (WPARAM)hFont, TRUE);
 
 	createButtons(hwnd);
 
